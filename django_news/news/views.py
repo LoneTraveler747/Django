@@ -9,6 +9,12 @@ def index(reqest):
                 context = contex_obj)
 
 def post_detail(request, id_post):
-    post = Post.objects.get(id = id_post)
+    post = Post.objects.get(id = id_post, #slug_iexact = slug
+    )
     context = {'post': post}
     return render(request, 'news/post_detail.html', context = context)
+
+def tags_list(requset):
+    tags = Tag.objects.all()
+    context_teg={'tags': tags}
+    return render(requset, 'news/tags_list.html', context = context_teg)

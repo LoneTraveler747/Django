@@ -1,5 +1,6 @@
 from django import db
 from django.db import models
+from django.db.models.base import Model
 from django.db.models.deletion import CASCADE, SET_NULL
 from django.db.models.expressions import Case
 from django.shortcuts import render
@@ -11,6 +12,7 @@ class Post(models.Model):
     title = models.CharField(max_length=150, verbose_name='Заголовк статьи')
     text = models.TextField(max_length=500,verbose_name='Текст')
     author = models.CharField(max_length=50,verbose_name='Автор')
+    tags = models.ManyToManyField('Tag', blank=True, related_name='posts')
     pub_date = models.DateTimeField(verbose_name='Дата публикации',auto_now=True)
 
     class Meta:
@@ -41,3 +43,14 @@ class Comment(models.Model):
         verbose_name= 'Комментарий '
         verbose_name_plural='Комментарии'
         db_table = 'comment'
+
+class Tag(models.Model):
+    title = models.CharField(max_length=50, verbose_name='Наименование тега')
+    slug = models.SlugField(max_length=50, unique=True)
+
+    def __str__(self):
+        return '{}'.format(self.title)
+
+    class Meta:
+        verbose_name = 'Тег'
+        verbose_name_plural = 'Теги'
