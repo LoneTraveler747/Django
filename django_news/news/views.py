@@ -1,9 +1,11 @@
 from django.shortcuts import redirect, render
 
-from .forms import CommentForm
+from .forms import CommentForm, PostCreateForm
 from . models import *
 from django.http import Http404
 from django.shortcuts import render, get_object_or_404  , redirect
+from django.views.generic import View
+from  . import forms
 
 def index(reqest):
     posts = Post.objects.all()
@@ -36,4 +38,25 @@ def add_comment(request, id_post):
         comment.fk_post = post
         comment.save()
     return redirect(post.get_absolute_url())
+
+class PostCreate(View):
+    def get(self, request, *args, **kwargs):
+        form = PostCreateForm()
+        return render(request, 'news/post_create_form.html', {'form':form})
+    
+    def post(self,request, *args, **kwargs):
+        filled_form = PostCreateForm(request.POST)
+
+        if filled_form.is_valid():
+            # post = Post()
+            # post.title = filled_form.cleaned_data['title']
+            # post.text = filled_form.cleaned_data['text']
+            # post.author = request.user
+            # post.save()
+            new_post=filled_form.save(commit=False)
+            new_post.author = request.user
+            new_post.save()
+            return redirect(new_post    )
+            #return redirect(post.get_absolute_url())
+        return render(request, 'news/post_create_form.html', {'form':filled_form})
    

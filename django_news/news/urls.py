@@ -3,6 +3,8 @@ from . import views
 
 urlpatterns = [
     path('list_posts/', views.index, name='list_posts_url'),
+
+    path('post_create', views.PostCreate.as_view(), name= 'post_create_url'), #Добалвение постов
     
     path('<int:id_post>', views.post_detail, name='post_detail_url'),
 
