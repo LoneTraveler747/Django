@@ -60,3 +60,10 @@ class Tag(models.Model):
     class Meta:
         verbose_name = 'Тег'
         verbose_name_plural = 'Теги'
+    
+    def get_update_url(self):
+        return reverse("tag_update_url", kwargs={"id_tag": self.pk})
+
+    def get_delete_url(self):
+        return reverse("tag_delete_url", kwargs={"id_tag": self.pk})
+

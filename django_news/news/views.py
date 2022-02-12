@@ -1,6 +1,6 @@
 from django.shortcuts import redirect, render
 
-from .forms import CommentForm, PostCreateForm
+from .forms import CommentForm, PostCreateForm, TagCreateForm, TagForm
 from . models import *
 from django.http import Http404
 from django.shortcuts import render, get_object_or_404  , redirect
@@ -20,7 +20,7 @@ def post_detail(request, id_post):
     except Post.DoesNotExist:
         raise Http404('Статья не найдена')
 
-    context = {'post': post, 'form':CommentForm}
+    context = {'post': post, 'form':CommentForm, 'tagform': TagForm}
     return render(request, 'news/post_detail.html', context = context)
 
 def tags_list(requset):
@@ -48,10 +48,48 @@ class TagCreate(View):
         filled_form = TagCreateForm(request.POST)
 
         if filled_form.is_valid():
-            new_tag = filled_form.save()
+            filled_form.save()
             return redirect('tags_list_url')
 
         return render(request, 'news/tag_create_form.html', {'form':filled_form})
+
+def add_tag(request, id_post):
+    form = TagForm(request.POST)
+    post = get_object_or_404(Post, id = id_post)
+    if form.is_valid():
+        post.tags.add(Tag.objects.get(pk = form.cleaned_data['tags']))
+    return redirect(post.get_absolute_url())
+
+
+
+class TagUpdate(View):
+        def get(self, request, id_tag):
+            tag = Tag.objects.get(pk=id_tag)
+            form = TagCreateForm(instance=tag)
+            return render(request, 'news/tag_update_form.html', context={'form': form, 'obj':tag})
+
+        def post(self, request, id_tag):
+            tag = Tag.objects.get(pk=id_tag)
+            form = TagCreateForm(request.POST, instance=tag)
+            
+            if form.is_valid():
+                form.save()
+                tags = Tag.objects.all()
+                context_teg={'tags': tags}
+                return render(request, 'news/tags_list.html', context = context_teg)
+            return render(request, 'news/tag_update_form.html', context={'form':form, 'obj': tag})
+
+class TagDelete(View):
+        def get(self, request, id_tag):
+            tag = Tag.objects.get(pk=id_tag)
+            return render(request, 'news/tag_delete_form.html', context={'obj': tag})
+
+        def post(self, request, id_tag):
+            tag = Tag.objects.get(pk=id_tag)
+            tag.delete()
+            tags = Tag.objects.all()
+            context_teg={'tags': tags}
+            return render(request, 'news/tags_list.html', context = context_teg)
 
 class PostCreate(View):
     def get(self, request, *args, **kwargs):
@@ -100,3 +138,5 @@ class PostDelete(View):
             posts = Post.objects.all()
             contex_obj = {'posts':posts}
             return render(request, 'news/index.html', context = contex_obj)
+
+

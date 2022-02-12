@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+    {% block content %}
+        <div class= "row justify-content-center">
+            <div class="col-5">
+                <form action="{% url 'tag_create_url' %}"
+                    method="post">
+                    {% csrf_token %}
+                    {{form | crispy}}
+                    <input type="submit" class="btn btn-primary mt-3" value="Создать тег">
+                </form>
+            </div>
+        </div>
+    {% endblock content %}

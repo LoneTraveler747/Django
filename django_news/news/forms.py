@@ -1,3 +1,4 @@
+from turtle import title
 from django import forms
 from django.db.models import fields
 
@@ -22,3 +23,8 @@ class TagCreateForm(forms.ModelForm):
 
         model = Tag
         fields = ('title','slug')
+
+class TagForm(forms.Form):
+    tags = forms.ChoiceField(widget=forms.Select, 
+        choices=tuple(Tag.objects.values_list('id', 'title')))
+    
