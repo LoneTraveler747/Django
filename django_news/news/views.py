@@ -1,10 +1,10 @@
 from django.shortcuts import redirect, render
 
-from .forms import CommentForm, PostCreateForm, TagCreateForm, TagForm
+from .forms import CommentForm, PostCreateForm, TagCreateForm, TagForm, UserUpdateForm
 from . models import *
 from django.http import Http404
 from django.shortcuts import render, get_object_or_404  , redirect
-from django.views.generic import View
+from django.views.generic import View, ListView
 from  . import forms
 
 def index(reqest):
@@ -59,8 +59,6 @@ def add_tag(request, id_post):
     if form.is_valid():
         post.tags.add(Tag.objects.get(pk = form.cleaned_data['tags']))
     return redirect(post.get_absolute_url())
-
-
 
 class TagUpdate(View):
         def get(self, request, id_tag):
@@ -140,3 +138,25 @@ class PostDelete(View):
             return render(request, 'news/index.html', context = contex_obj)
 
 
+class UserUpdateView(View):
+
+    def get(self, request):
+        data_obj = User.objects.get(username=request.user.username)
+        bound_form = UserUpdateForm(instance=data_obj)
+        return render(request, 'news/user_account.html', context={'form': bound_form, 'obj': data_obj})
+    
+    def post(self, request):
+        data_obj = User.objects.get(username=request.user.username)
+        bound_form = UserUpdateForm(request.POST, instance=data_obj)
+
+        if bound_form.is_valid():
+            bound_form.save()
+            return redirect('profile_detail_url')
+        return render(request, 'news/user_account.html', context={'form': bound_form, 'obj':data_obj})
+
+class UserPostsListView(ListView):
+        model = Post
+        template_name = 'news/posts_list.html'
+
+        def get_queryset(self):
+            return Post.objects.filter(author = self.request.user).order_by('pub_date')

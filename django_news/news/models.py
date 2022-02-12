@@ -7,7 +7,7 @@ from django.db.models.expressions import Case
 from django.shortcuts import render
 from django.shortcuts import reverse
 from django.contrib.auth import models as auth_models
-
+from django.contrib.auth.models import User
 # Create your models here.
 
 class Post(models.Model):
@@ -18,7 +18,7 @@ class Post(models.Model):
     pub_date = models.DateTimeField(verbose_name='Дата публикации',auto_now=True)
 
     class Meta:
-        verbose_name= 'Статья '
+        verbose_name= 'Статья'
         verbose_name_plural='Статьи'
 
     def get_absolute_url(self):

@@ -24,4 +24,10 @@ urlpatterns = [
     path('<int:id_post>/post_update/', views.PostUpdate.as_view(), name="post_update_url"),
 
     path('<int:id_post>/post_delete/', views.PostDelete.as_view(), name= "post_delete_url"),
+
+    path('account/', views.UserUpdateView.as_view(), name="profile_detail_url"),
+
+    path('account/update', views.UserUpdateView.as_view(), name="profile_update_url"),
+
+    path('account/posts', views.UserUpdateView.as_view(), name="user_posts_url"),
 ]
