@@ -27,6 +27,12 @@ class Post(models.Model):
     def __str__(self):
          return self.title
 
+    def get_update_url(self):
+        return reverse("post_update_url", kwargs={"id_post": self.pk})
+
+    def get_delete_url(self):
+        return reverse("post_delete_url", kwargs={"id_post": self.pk})
+
 class Comment(models.Model):
     text = models.TextField(max_length=500,verbose_name='Текст')
     author = models.ForeignKey(auth_models.User, on_delete=CASCADE)

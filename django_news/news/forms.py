@@ -1,7 +1,7 @@
 from django import forms
 from django.db.models import fields
 
-from .models import Post
+from .models import Post, Tag
 
 class CommentForm(forms.Form):
     text = forms.CharField(widget=forms.Textarea(attrs={'class' : 'form-control'}))
@@ -13,3 +13,12 @@ class PostCreateForm(forms.ModelForm): #Поля для ввода статьи
 
         model = Post
         fields = ('title', 'text')
+
+class TagCreateForm(forms.ModelForm):
+    """Form definition for TagCreate."""
+
+    class Meta:
+        """Meta definition for TagCreateForm."""
+
+        model = Tag
+        fields = ('title','slug')

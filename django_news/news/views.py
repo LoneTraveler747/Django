@@ -39,6 +39,20 @@ def add_comment(request, id_post):
         comment.save()
     return redirect(post.get_absolute_url())
 
+class TagCreate(View):
+    def get(self, request, *args, **kwargs):
+        form = TagCreateForm()
+        return render(request, 'news/tag_create_form.html', {'form':form})
+    
+    def post(self,request, *args, **kwargs):
+        filled_form = TagCreateForm(request.POST)
+
+        if filled_form.is_valid():
+            new_tag = filled_form.save()
+            return redirect('tags_list_url')
+
+        return render(request, 'news/tag_create_form.html', {'form':filled_form})
+
 class PostCreate(View):
     def get(self, request, *args, **kwargs):
         form = PostCreateForm()
@@ -59,4 +73,30 @@ class PostCreate(View):
             return redirect(new_post    )
             #return redirect(post.get_absolute_url())
         return render(request, 'news/post_create_form.html', {'form':filled_form})
-   
+    
+class PostUpdate(View):
+    def get(self, request, id_post):
+        post = Post.objects.get(pk=id_post)
+        form = PostCreateForm(instance=post)
+        return render(request, 'news/post_update_form.html', context={'form': form, 'obj':post})
+
+    def post(self, request, id_post):
+        post = Post.objects.get(pk=id_post)
+        form = PostCreateForm(request.POST, instance=post)
+        if form.is_valid():
+            new_obj = form.save()
+            return redirect(new_obj)
+        return render(request, 'news/post_update_form.html', context={'form':form, 'obj': post})
+
+
+class PostDelete(View):
+        def get(self, request, id_post):
+            post = Post.objects.get(pk=id_post)
+            return render(request, 'news/post_delete_form.html', context={'obj': post})
+
+        def post(self, request, id_post):
+            post = Post.objects.get(pk=id_post)
+            post.delete()
+            posts = Post.objects.all()
+            contex_obj = {'posts':posts}
+            return render(request, 'news/index.html', context = contex_obj)
