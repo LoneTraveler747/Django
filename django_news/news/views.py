@@ -156,7 +156,7 @@ class UserUpdateView(View):
 
 class UserPostsListView(ListView):
         model = Post
-        template_name = 'news/posts_list.html'
+        template_name = 'news/posts_lists.html'
 
         def get_queryset(self):
             return Post.objects.filter(author = self.request.user).order_by('pub_date')

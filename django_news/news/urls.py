@@ -29,5 +29,5 @@ urlpatterns = [
 
     path('account/update', views.UserUpdateView.as_view(), name="profile_update_url"),
 
-    path('account/posts', views.UserUpdateView.as_view(), name="user_posts_url"),
+    path('account/posts', views.UserPostsListView.as_view(), name="user_posts_url"),
 ]

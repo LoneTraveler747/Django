@@ -7,7 +7,7 @@
 <ul>
     {% for post in post_list %}
     <li>
-        <a href="{% url 'post_detail_url' post.pk %}">{{post.title}}</a>
+        <a class="nav-link" aria-current="page" href="{% url 'post_detail_url' post.pk %}">{{post.title}}</a>
     </li>
     {% endfor %}
 </ul>
