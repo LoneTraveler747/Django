@@ -39,15 +39,21 @@
 
 {% if post.comment_set.all %}
 {% for comment in post.comment_set.all %}
-    <div class="card border-dark mt-3" style="max-width: 50rem;">
-  <div class="card-header">{{comment.pub_date}}</div>
-  <div class="card-body text-dark">
-    <h5 class="card-title">{{comment.author}}</h5>
-    <p class="card-text">{{comment.text}}</p>
+  <div class="card border-dark mt-3" style="max-width: 50rem;">
+    <div class="card-header">
+      {% if perms.comments.can_see_author %}
+          {{comment.author}}
+      {% else %}
+        Аноним
+      {% endif %}
+       ,
+      {{comment.pub_date}} 
+    </div>
+    <div class="card-body text-dark">
+      <p class="card-text">{{comment.text}}</p>
+    </div>
   </div>
-</div>
 {% endfor %}
-
 {% else %}
     <h5> Нет комментариев </h5>
 {% endif %}

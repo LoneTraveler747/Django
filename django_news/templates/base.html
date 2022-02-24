@@ -16,8 +16,52 @@
         <li class="nav-item"><a href="{% url 'tags_list_url' %}" class="nav-link" aria-current="page">Теги</a></li>
         <li class="nav-item"><a href="{% url 'tag_create_url' %}" class="nav-link" aria-current="page">Создать тег</a></li>
         <li class="nav-item"><a href="{% url 'profile_detail_url' %}" class="nav-link" aria-current="page">Личный кабинет</a></li>
-        <a href="{% url 'django_registration_register' %}" type="button" class="btn btn-warning">Sing up</a>
+
+        
       </ul>
+
+      <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3">
+        <input type="search" class="form-control form-control-dark" placeholder="Search...." aria-label="Search">
+      </form>
+
+      <div class="text-end">
+      {% if user.is_authenticated %}
+      
+      <div class="dropdown">  
+        <button class="btn btn-warning dropdown-toggle" type="button" id="dropdownMenuButton1" 
+          data-bs-toggle="dropdown" aria-expanded="false">
+            Аккаунт
+        </button>
+          
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+            <li>
+              <a class="dropdown-item" href="{% url 'user_posts_url' %}">Мои статьи</a>
+            </li>
+
+            <li>
+              <a class="dropdown-item" href="{% url 'profile_update_url' %}">Настройки аккаунта</a>
+            </li>
+
+            <li>
+              <a class="dropdown-item" href="{% url 'logout' %}">Выйти</a>
+            </li>
+        </ul>
+      </div>
+
+      {% else %}
+      <a type="{% url 'login' %}" class="btn btn-outline-light me-2">Login</a>
+      {% endif %}
+      <a type="{% url 'django_registration_register' %}" class="btn btn-outline-light me-2">Sing-up</a>
+      </div>
+
+      <div class="text-end">
+            <a type= "{ % url 'login' % }" class="btn-outline-light me-2">Login</a>
+            <a href="{% url 'django_registration_register' %}" 
+              type="button" 
+              class="btn btn-warning">Sing up
+            </a>
+      </div>
+
     </header>
   </div> 
     <div class="container">

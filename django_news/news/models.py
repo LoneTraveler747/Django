@@ -35,10 +35,10 @@ class Post(models.Model):
 
 class Comment(models.Model):
     text = models.TextField(max_length=500,verbose_name='Текст')
-    author = models.ForeignKey(auth_models.User, on_delete=CASCADE)
+    author = models.ForeignKey(auth_models.User, on_delete=CASCADE, verbose_name='Автор')
     pub_date = models.DateTimeField(verbose_name='Дата публикации',auto_now=True)
 
-    fk_post = models.ForeignKey(to=Post,on_delete=CASCADE,
+    fk_post = models.ForeignKey(to=Post,on_delete=CASCADE, verbose_name='Статья'
     #null=True,blank=True
     ) #Создание ключа с сылкой на класс БД, типа FK, удаление
 
@@ -49,6 +49,7 @@ class Comment(models.Model):
         verbose_name= 'Комментарий '
         verbose_name_plural='Комментарии'
         db_table = 'comment'
+        permissions = (("can_see_author", "Можно видеть автора коментария."),)
 
 class Tag(models.Model):
     title = models.CharField(max_length=50, verbose_name='Наименование тега')

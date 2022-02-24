@@ -1,11 +1,14 @@
 from django.shortcuts import redirect, render
 
-from .forms import CommentForm, PostCreateForm, TagCreateForm, TagForm, UserUpdateForm
+from .forms import *
+#CommentForm, PostCreateForm, TagCreateForm, TagForm, UserUpdateForm
 from . models import *
 from django.http import Http404
 from django.shortcuts import render, get_object_or_404  , redirect
 from django.views.generic import View, ListView
 from  . import forms
+from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 
 def index(reqest):
     posts = Post.objects.all()
@@ -28,6 +31,8 @@ def tags_list(requset):
     context_teg={'tags': tags}
     return render(requset, 'news/tags_list.html', context = context_teg)
 
+@permission_required('comment.can_add_comment')
+@login_required
 def add_comment(request, id_post):
     form = CommentForm(request.POST)
     post = get_object_or_404(Post, id = id_post)
@@ -89,7 +94,10 @@ class TagDelete(View):
             context_teg={'tags': tags}
             return render(request, 'news/tags_list.html', context = context_teg)
 
-class PostCreate(View):
+class PostCreate(PermissionRequiredMixin, LoginRequiredMixin, View):
+    permission_required=('post.can_add_post', )
+    raise_exceprion = True
+
     def get(self, request, *args, **kwargs):
         form = PostCreateForm()
         return render(request, 'news/post_create_form.html', {'form':form})
@@ -138,7 +146,7 @@ class PostDelete(View):
             return render(request, 'news/index.html', context = contex_obj)
 
 
-class UserUpdateView(View):
+class UserUpdateView(LoginRequiredMixin, View):
 
     def get(self, request):
         data_obj = User.objects.get(username=request.user.username)
@@ -154,7 +162,7 @@ class UserUpdateView(View):
             return redirect('profile_detail_url')
         return render(request, 'news/user_account.html', context={'form': bound_form, 'obj':data_obj})
 
-class UserPostsListView(ListView):
+class UserPostsListView(LoginRequiredMixin, ListView):
         model = Post
         template_name = 'news/posts_lists.html'
 
