@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+{% if form.errors %}
+  <p class="row justify-content-center">Your username and password didn't match. Please try again.</p>
+{% endif %}
+
+<form method="post" action="{% url 'login' %}">
+<div class="row justify-content-center">
+    <div class="col-md-2 mt-8">
+    <h2>Авторизация</h2>
+            {% csrf_token %}
+                {{form}}
+
+                <button class="btn btn-primary" type="submit">Авторизоваться</button>
+    <p><a class="row" href="{% url 'password_reset' %}">Lost password?</a></p>
+    </div>
+    
+</div>
+</form>
+
+{# Assumes you setup the password_reset view in your URLconf #}
+
+
+{% endblock %}

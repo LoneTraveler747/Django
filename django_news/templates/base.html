@@ -46,22 +46,13 @@
               <a class="dropdown-item" href="{% url 'logout' %}">Выйти</a>
             </li>
         </ul>
-      </div>
+      </div>  
 
       {% else %}
-      <a type="{% url 'login' %}" class="btn btn-outline-light me-2">Login</a>
+      <a href="{% url 'login' %}" class="btn btn-outline-light me-2">Login</a>
+      <a href="{% url 'django_registration_register' %}" class="btn btn-outline-light me-2">Sing-up</a>
       {% endif %}
-      <a type="{% url 'django_registration_register' %}" class="btn btn-outline-light me-2">Sing-up</a>
       </div>
-
-      <div class="text-end">
-            <a type= "{ % url 'login' % }" class="btn-outline-light me-2">Login</a>
-            <a href="{% url 'django_registration_register' %}" 
-              type="button" 
-              class="btn btn-warning">Sing up
-            </a>
-      </div>
-
     </header>
   </div> 
     <div class="container">
