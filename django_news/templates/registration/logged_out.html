@@ -1,7 +1,6 @@
 {% extends "base.html" %}
 
 {% block content %}
-<p>Logged out!</p>
-
-<a href="{% url 'login'%}">Click here to login again.</a>
+<p class="row justify-content-center">Вы вышли из аккаунта</p>
+<a class="row justify-content-center" href="{% url 'login'%}">Повторить авторизацию</a>
 {% endblock %}

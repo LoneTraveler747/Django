@@ -20,6 +20,7 @@ class Post(models.Model):
     class Meta:
         verbose_name= 'Статья'
         verbose_name_plural='Статьи'
+        ordering = ['-pub_date']
 
     def get_absolute_url(self):
         return reverse("post_detail_url", kwargs={"id_post": self.pk})
@@ -61,6 +62,7 @@ class Tag(models.Model):
     class Meta:
         verbose_name = 'Тег'
         verbose_name_plural = 'Теги'
+        ordering = ['-title']
     
     def get_update_url(self):
         return reverse("tag_update_url", kwargs={"id_tag": self.pk})

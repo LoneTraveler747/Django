@@ -3,7 +3,7 @@
 {% block content %}
 
 {% if form.errors %}
-  <p class="row justify-content-center">Your username and password didn't match. Please try again.</p>
+  <p class="row justify-content-center">Некорректный ввод логина или пароля. Повторите попытку.</p>
 {% endif %}
 
 <form method="post" action="{% url 'login' %}">
@@ -12,15 +12,10 @@
     <h2>Авторизация</h2>
             {% csrf_token %}
                 {{form}}
-
                 <button class="btn btn-primary" type="submit">Авторизоваться</button>
-    <p><a class="row" href="{% url 'password_reset' %}">Lost password?</a></p>
+    <p><a class="row justify-content-center" href="{% url 'password_reset' %}">Забыли пароль?</a></p>
     </div>
-    
+
 </div>
 </form>
-
-{# Assumes you setup the password_reset view in your URLconf #}
-
-
 {% endblock %}

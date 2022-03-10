@@ -44,9 +44,8 @@
       {% if perms.comments.can_see_author %}
           {{comment.author}}
       {% else %}
-        Аноним
+        Аноним,
       {% endif %}
-       ,
       {{comment.pub_date}} 
     </div>
     <div class="card-body text-dark">

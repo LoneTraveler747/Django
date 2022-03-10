@@ -19,13 +19,12 @@
             <div class="form-group row mt-2">
                 <label class="col-sm-5 col-form-label">Права пользователя</label>
                 <div class="col-sm-7">
-                    <input type="text" readonly class="form-control" value="{% if request.user.is_superuser %}
-        Админ
+                    <input type="text" readonly class="form-control" value="{% if request.user.is_superuser %} Админ">
                     {% elif request.user.is_staff %}
-        Модератор
+                    Модератор
                     {% else %}
-        Пользователь
-                    {% endif %}">
+                    Пользователь
+                    {% endif %}
                 </div>
             </div>
             <button class="btn btn-primary" type="submit">Сохранить</button>

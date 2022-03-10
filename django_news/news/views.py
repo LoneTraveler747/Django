@@ -9,13 +9,38 @@ from django.views.generic import View, ListView
 from  . import forms
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.db.models import Q
+from django.core.paginator  import Paginator
 
-def index(reqest):
-    posts = Post.objects.all()
-    #select * from Post
-    contex_obj = {'posts':posts}
-    return render(reqest, 'news/index.html', 
-                context = contex_obj)
+def index(request):
+    search_request = request.GET.get('search','')
+    if search_request:
+        posts = Post.objects.filter(Q(title__icontains=search_request) | Q(title__icontains=search_request))
+    else:
+        posts = Post.objects.all()
+    #___________________________
+    paginator = Paginator(posts, 3)
+    page_number = request.GET.get('page')
+    page = paginator.get_page(page_number)
+    is_paginated = page.has_other_pages()
+    if page.has_previous():
+        prev_url = '?page={}'.format(page.previous_page_number())
+    else:
+        prev_url = ''
+    
+    if page.has_next():
+        next_url = '?page={}'.format(page.next_page_number())
+    else:
+        next_url = ''
+
+    contex_obj = {'posts_var':page,
+        'is_paginated':is_paginated,
+        'prev_url':prev_url,
+        'next_url':next_url
+            }
+    #___________________________
+    contex_obj = {'posts':posts} 
+    return render(request, 'news/index.html', context = contex_obj)
 
 def post_detail(request, id_post):
     try:
