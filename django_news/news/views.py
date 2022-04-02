@@ -15,11 +15,11 @@ from django.core.paginator  import Paginator
 def index(request):
     search_request = request.GET.get('search','')
     if search_request:
-        posts = Post.objects.filter(Q(title__icontains=search_request) | Q(title__icontains=search_request))
+        posts = Post.objects.filter(Q(title__icontains=search_request) | Q(title__icontains=search_request) | Q(author__username__icontains=search_request) | Q(pub_date__date__icontains=search_request))
     else:
         posts = Post.objects.all()
     #___________________________
-    paginator = Paginator(posts, 3)
+    paginator = Paginator(posts, 5)
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
     is_paginated = page.has_other_pages()
@@ -39,7 +39,6 @@ def index(request):
         'next_url':next_url
             }
     #___________________________
-    contex_obj = {'posts':posts} 
     return render(request, 'news/index.html', context = contex_obj)
 
 def post_detail(request, id_post):

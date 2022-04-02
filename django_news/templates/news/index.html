@@ -2,7 +2,7 @@
 {% block content %}
 
     <h3>Статьи: </h3>
-    {% for  post in posts %}
+    {% for  post in posts_var %}
         <div class="card mt-3">
             <h5 class="card-header">{{post.author}}, {{post.pub_date}}, Теги: {% for tag in post.tags.all %} #{{tag.title}} {% endfor %}</h5>
               
