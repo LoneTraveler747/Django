@@ -38,7 +38,7 @@
 <h5>Комментарии:</h5>
 
 {% if post.comment_set.all %}
-{% for comment in post.comment_set.all %}
+{% for comment in comment_var %}
   <div class="card border-dark mt-3" style="max-width: 50rem;">
     <div class="card-header">
       {% if perms.comments.can_see_author %}
@@ -55,6 +55,35 @@
 {% endfor %}
 {% else %}
     <h5> Нет комментариев </h5>
+{% endif %}
+{% if is_paginated %}
+  <nav class="list-pages">
+    <ul class="pagination">
+      <li class="page-item {% if not prev_url %} disabled {% endif %}">
+        <a class="page-link" href="{{ prev_url }}" tabindex="-1" aria-disabled="true">Назад</a>
+      </li>
+
+      {% for i in comment_var.paginator.page_range %}
+        {% if comment_var.number == i %}
+        
+            <li class="page-item active" aria-current="page">
+              <a class="page-link" href="?page={{ i }}">{{ i }}<span class="sr-only"></span></a>
+            </li>
+
+        {%elif i > comment_var.number|add:-3 and i < comment_var.number|add:3 %}
+            <li class="page-item">
+              <a class="page-link" href="?page={{ i }}">{{ i }}</a>
+            </li>
+
+        {%endif%}
+
+      {% endfor %}
+
+      <li class="page-item {% if not next_url %} disabled {% endif %}">
+        <a class="page-link" href="{{ next_url }}">Вперед</a>
+      </li>
+    </ul>
+  </nav>
 {% endif %}
 
 <div class='row'>

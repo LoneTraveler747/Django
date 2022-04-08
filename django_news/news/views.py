@@ -44,11 +44,34 @@ def index(request):
 def post_detail(request, id_post):
     try:
         post = Post.objects.get(id = id_post,)
+        comment = post.comment_set.all()
+        paginator = Paginator(comment, 4)
+        page_numbercom = request.GET.get('page')
+        page = paginator.get_page(page_numbercom)
+        is_paginated = page.has_other_pages()
+        if page.has_previous():
+            prev_url = '?page{}'.format(page.previous_page_number())
+        else:
+            prev_url=''
+        
+        if page.has_next():
+            next_url = '?page{}'.format(page.next_page_number())
+        else:
+            next_url=''
     except Post.DoesNotExist:
         raise Http404('Статья не найдена')
 
-    context = {'post': post, 'form':CommentForm, 'tagform': TagForm}
-    return render(request, 'news/post_detail.html', context = context)
+    context_com = {'comment_var':page,
+    'is_paginated':is_paginated,
+    'prev_url':prev_url,
+    'next_url':next_url,
+    'post': post,
+    'form':CommentForm,
+    'tagform': TagForm
+    }
+
+    #context = {'post': post, 'form':CommentForm, 'tagform': TagForm}
+    return render(request, 'news/post_detail.html', context = context_com)
 
 def tags_list(requset):
     tags = Tag.objects.all()
